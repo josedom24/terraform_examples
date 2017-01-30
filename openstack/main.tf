@@ -3,7 +3,7 @@ provider "openstack" {
         user_name  = "demo"
         tenant_name = "demo"
         domain_name = "default"
-        password  = "40damePI"
+        password  = "${var.secret_key}"
         auth_url  = "https://jupiter.gonzalonazareno.org:5000/v3"
         cacert_file = "gonzalonazareno.crt"
 }
@@ -33,6 +33,16 @@ resource "openstack_compute_instance_v2" "basic" {
   }
 
 
+  # Copies the file as the root user using SSH
+  provisioner "file" {
+    source = "index.html"
+    destination = "/tmp/index.html"
+    connection {
+        type = "ssh"
+        user = "debian"
+        }
+}
+
   provisioner "remote-exec" {
     connection {
         type = "ssh"
@@ -41,18 +51,10 @@ resource "openstack_compute_instance_v2" "basic" {
     inline = [
       "sudo apt-get update",
       "sudo apt-get -y install apache2",
-    
+      "sudo cp /tmp/index.html /var/www/html",
     ]
   }
 
-  # Copies the file as the root user using SSH
-  provisioner "file" {
-    source = "index.html"
-    destination = "/var/www/html/index.html"
-    connection {
-        type = "ssh"
-        user = "debian"
-        }
-}
+
 }
 
