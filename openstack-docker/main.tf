@@ -17,7 +17,7 @@ resource "openstack_compute_floatingip_v2" "myip" {
 resource "openstack_compute_instance_v2" "basic" {
   name = "basic"
   region = "RegionOne"
-  image_id = "dbefe807-8315-424f-b3cd-1808666fcd13"
+  image_id = "63f0ffcb-7574-4729-bed3-8b934f3ddaa6"
   flavor_id = "12"
   key_pair = "key_jdmr"
   security_groups = ["default"]
@@ -33,29 +33,23 @@ resource "openstack_compute_instance_v2" "basic" {
   }
 
 
-  # Copies the file as the root user using SSH
-  provisioner "file" {
-    source = "index.html"
-    destination = "/tmp/index.html"
-    connection {
-        type = "ssh"
-        user = "debian"
-        }
-}
+  
 
   provisioner "remote-exec" {
     connection {
         type = "ssh"
-        user = "debian"
+        user = "ubuntu"
         }
     inline = [
-      "sudo apt-get update",
       "sudo apt-get install apt-transport-https ca-certificates",
-      "sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D",
-      "sudo echo 'deb https://apt.dockerproject.org/repo debian-jessie main'>/etc/apt/sources.list.d/docker.list",
+      "curl -fsSL https://yum.dockerproject.org/gpg | sudo apt-key add",
+      "sudo apt-get install software-properties-common",
+      "sudo add-apt-repository 'deb https://apt.dockerproject.org/repo/ ubuntu-xenial main'",
       "sudo apt-get update",
-      "sudo apt-get install docker-engine",
-      "sudo usermod -a -G docker usuario",
+      "sudo apt-get -y install docker-engine",
+      "sudo apt-get -y install python-simplejson",
+      "sudo apt-get -y install python-docker",
+      "sudo usermod -a -G docker ubuntu",
       
     ]
   }
