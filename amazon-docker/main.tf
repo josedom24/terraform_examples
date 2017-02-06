@@ -28,15 +28,7 @@ resource "aws_instance" "web" {
     "Name" = "prueba"
   }
 
-  # Copies the file as the root user using SSH
-  provisioner "file" {
-    source = "index.html"
-    destination = "/tmp/index.html"
-    connection {
-        type = "ssh"
-        user = "ubuntu"
-        }
-}
+  
 
   provisioner "remote-exec" {
     connection {
@@ -44,13 +36,15 @@ resource "aws_instance" "web" {
         user = "ubuntu"
         }
     inline = [
-      "curl -fsSL https://yum.dockerproject.org/gpg | sudo apt-key add",
-
       "sudo apt-get install apt-transport-https ca-certificates",
+      "curl -fsSL https://yum.dockerproject.org/gpg | sudo apt-key add",
       "sudo apt-get install software-properties-common",
-      "sudo add-apt-repository 'deb https://apt.dockerproject.org/repo/ubuntu-$(lsb_release -cs) main'",
+      "sudo add-apt-repository 'deb https://apt.dockerproject.org/repo/ ubuntu-xenial main'",
       "sudo apt-get update",
       "sudo apt-get -y install docker-engine",
+      "sudo apt-get -y install python-simplejson",
+      "sudo apt-get -y install python-docker",
+      "sudo usermod -a -G docker ubuntu",
       
     ]
   }
