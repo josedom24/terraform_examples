@@ -11,7 +11,7 @@ provider "openstack" {
 # Create a web server
 
 resource "openstack_compute_floatingip_v2" "myip" {
-  pool = "ext-net"
+  pool = "${var.ext-net}"
 }
 
 resource "openstack_networking_network_v2" "red-ext" {
@@ -22,8 +22,8 @@ resource "openstack_networking_network_v2" "red-ext" {
 resource "openstack_networking_subnet_v2" "subred-ext" {
   name = "subred-ext"
   network_id = "${openstack_networking_network_v2.red-ext.id}"
-  cidr = "192.168.200.0/24"
-  dns_nameservers = ["192.168.102.2"]
+  cidr = "${var.ip_subred-ext}"
+  dns_nameservers = "${var.dns_subred-ext}"
   ip_version = 4
 }
 
@@ -35,18 +35,16 @@ resource "openstack_networking_network_v2" "red-int" {
 resource "openstack_networking_subnet_v2" "subred-int" {
   name = "subred-int"
   network_id = "${openstack_networking_network_v2.red-int.id}"
-  cidr = "192.168.201.0/24"
+  cidr = "${var.ip_subred-int}"
   ip_version = 4
 }
-
-
 
 resource "openstack_compute_instance_v2" "cliente" {
   name = "cliente"
   region = "RegionOne"
-  image_id = "dbefe807-8315-424f-b3cd-1808666fcd13"
-  flavor_id = "12"
-  key_pair = "key_jdmr"
+  image_id = "${var.imagen}"
+  flavor_id = "${var.sabor}"
+  key_pair = "${var.key_ssh}"
   security_groups = ["default"]
 
   metadata {
@@ -65,7 +63,7 @@ resource "openstack_compute_instance_v2" "cliente" {
   provisioner "remote-exec" {
     connection {
         type = "ssh"
-        user = "debian"
+        user = "ubuntu"
         }
     inline = [
       "sudo apt-get update",
@@ -80,9 +78,9 @@ resource "openstack_compute_instance_v2" "cliente" {
 resource "openstack_compute_instance_v2" "controller" {
   name = "controller"
   region = "RegionOne"
-  image_id = "63f0ffcb-7574-4729-bed3-8b934f3ddaa6"
-  flavor_id = "14"
-  key_pair = "key_jdmr"
+  image_id = "${var.imagen}"
+  flavor_id = "${var.sabor}"
+  key_pair = "${var.key_ssh}"
   security_groups = ["default"]
 
   metadata {
@@ -102,9 +100,9 @@ resource "openstack_compute_instance_v2" "controller" {
 resource "openstack_compute_instance_v2" "computer1" {
   name = "computer1"
   region = "RegionOne"
-  image_id = "63f0ffcb-7574-4729-bed3-8b934f3ddaa6"
-  flavor_id = "14"
-  key_pair = "key_jdmr"
+  image_id = "${var.imagen}"
+  flavor_id = "${var.sabor}"
+  key_pair = "${var.key_ssh}"
   security_groups = ["default"]
 
   metadata {
