@@ -8,7 +8,6 @@ provider "openstack" {
         cacert_file = "gonzalonazareno.crt"
 }
 
-# Create a web server
 
 resource "openstack_compute_floatingip_v2" "myip" {
   pool = "${var.ext-net}"
@@ -87,6 +86,30 @@ resource "openstack_compute_instance_v2" "controller" {
   network {
     uuid = "${openstack_networking_network_v2.red-int.id}"
     fixed_ip_v4 = "192.168.221.101"
+  }
+
+}
+
+resource "openstack_compute_instance_v2" "compute1" {
+  name = "compute1"
+  region = "RegionOne"
+  image_id = "${var.imagen}"
+  flavor_id = "${var.sabor}"
+  key_pair = "${var.key_ssh}"
+  security_groups = ["default"]
+
+  metadata {
+    this = "that"
+  }
+
+  network {
+    uuid = "${openstack_networking_network_v2.red-ext.id}"
+    fixed_ip_v4 = "192.168.1.102"
+  }
+
+  network {
+    uuid = "${openstack_networking_network_v2.red-int.id}"
+    fixed_ip_v4 = "192.168.221.102"
   }
 
 }
