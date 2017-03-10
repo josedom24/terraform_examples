@@ -3,3 +3,5 @@ apt-get install python-virtualenv
 apt-get install python-dev python-virtualenv libssl-dev libffi-dev
 virtualenv os
 (os)pip install requests python-novaclient==6.0.0 python-neutronclient==6.0.0
+
+sudo echo 1 > /proc/sys/net/ipv4/ip_forward
