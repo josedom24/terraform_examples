@@ -55,10 +55,11 @@ resource "openstack_compute_instance_v2" "cliente" {
   }
   network {
     name = "demo-net"
+    #fixed_ip_v4 = "10.0.0.8"
     floating_ip = "${openstack_compute_floatingip_v2.myip.address}"
     # Terraform will use this network for provisioning
-    access_network = true
-    fixed_ip_v4 = "10.0.0.8"
+    # access_network = true
+    
   }
   network {
     uuid = "${openstack_networking_network_v2.red-ext.id}"

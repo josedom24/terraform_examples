@@ -1,6 +1,9 @@
 apt-get install build-essential
 apt-get install python-virtualenv
 apt-get install python-dev python-virtualenv libssl-dev libffi-dev
+
+
+export LC_ALL=C
 virtualenv os
 (os)pip install requests python-novaclient==6.0.0 python-neutronclient==6.0.0
 
@@ -10,3 +13,8 @@ iptables -t nat -A POSTROUTING -s 192.168.1.0/24 -o ens3 -j MASQUERADE
 net.ipv4.ip_forward=1
 
 sysctl -p
+
+
+apt-get install ansible
+git clone git@github.com:iesgn/openstack-ubuntu-ansible.git
+
