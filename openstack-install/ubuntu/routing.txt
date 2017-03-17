@@ -4,4 +4,9 @@ apt-get install python-dev python-virtualenv libssl-dev libffi-dev
 virtualenv os
 (os)pip install requests python-novaclient==6.0.0 python-neutronclient==6.0.0
 
-sudo echo 1 > /proc/sys/net/ipv4/ip_forward
+iptables -t nat -A POSTROUTING -s 192.168.1.0/24 -o ens3 -j MASQUERADE
+
+/etc/sysctl.conf
+net.ipv4.ip_forward=1
+
+sysctl -p

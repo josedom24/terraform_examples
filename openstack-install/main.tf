@@ -23,7 +23,7 @@ resource "openstack_networking_subnet_v2" "subred-ext" {
   name = "subred-ext"
   network_id = "${openstack_networking_network_v2.red-ext.id}"
   cidr = "${var.ip_subred-ext}"
-  #dns_nameservers = "${var.dns_subred-ext}"
+  dns_nameservers = "${var.dns_subred-ext}"
   ip_version = 4
 
 }
