@@ -16,5 +16,6 @@ sysctl -p
 
 
 apt-get install ansible
-git clone git@github.com:iesgn/openstack-ubuntu-ansible.git
+git clone -b ocata git@github.com:iesgn/openstack-ubuntu-ansible.git
 
+apt-get install python aptitude
