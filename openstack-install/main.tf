@@ -55,15 +55,12 @@ resource "openstack_compute_instance_v2" "cliente" {
   }
   network {
     name = "demo-net"
-    #fixed_ip_v4 = "10.0.0.8"
     floating_ip = "${openstack_compute_floatingip_v2.myip.address}"
-    # Terraform will use this network for provisioning
-    # access_network = true
-    
+
   }
   network {
     uuid = "${openstack_networking_network_v2.red-ext.id}"
-    fixed_ip_v4 = "192.168.1.1"
+    fixed_ip_v4 = "${var.gateway-ext}"
   }
 
 }
@@ -82,12 +79,12 @@ resource "openstack_compute_instance_v2" "controller" {
 
   network {
     uuid = "${openstack_networking_network_v2.red-ext.id}"
-    fixed_ip_v4 = "192.168.1.101"
+    fixed_ip_v4 = "${var.controller_ip_ext}"
   }
 
   network {
     uuid = "${openstack_networking_network_v2.red-int.id}"
-    fixed_ip_v4 = "192.168.221.101"
+    fixed_ip_v4 = "${var.controller_ip_int}"
   }
 
 }
@@ -106,12 +103,12 @@ resource "openstack_compute_instance_v2" "compute1" {
 
   network {
     uuid = "${openstack_networking_network_v2.red-ext.id}"
-    fixed_ip_v4 = "192.168.1.102"
+    fixed_ip_v4 = "${var.compute1_ip_ext}"
   }
 
   network {
     uuid = "${openstack_networking_network_v2.red-int.id}"
-    fixed_ip_v4 = "192.168.221.102"
+    fixed_ip_v4 = "${var.compute1_ip_int}" 
   }
 
 }
